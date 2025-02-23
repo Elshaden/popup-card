@@ -22,13 +22,13 @@ composer require elshaden/nova-popup-card
 ## Configuration
 You can publish the config file with:
 ```bash
-php artisan vendor:publish --provider="Elshaden\PopupCard\PopupCardServiceProvider" --tag="config"
+   php artisan vendor:publish --provider="Elshaden\PopupCard\CardServiceProvider" --tag="popup-card-config"
 ```
 
 ## Migrations
 You can publish the migration with:
 ```bash
-php artisan vendor:publish --provider="Elshaden\PopupCard\PopupCardServiceProvider" --tag="migrations"
+php artisan vendor:publish --provider="Elshaden\PopupCard\CardServiceProvider" --tag="popup-card-migrations"
 ```
 
 After publishing the migration you can create the popup_card_statuses table by running the migrations:
