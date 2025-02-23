@@ -1,9 +1,10 @@
 let mix = require('laravel-mix')
 
-mix.js('resources/js/tool.js', 'dist/js')
-    .vue({ version: 2 })
-    .webpackConfig({
-        externals: {
-            Vue: 'vue',
-        }
-    });
+require('./nova.mix')
+
+mix
+  .setPublicPath('dist')
+  .js('resources/js/card.js', 'js')
+  .vue({ version: 3 })
+  .css('resources/css/card.css', 'css')
+  .nova('elshaden/popup-card')
