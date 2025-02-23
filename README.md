@@ -61,11 +61,11 @@ You must Add the Trait to your user model
 This will store the popup card status as seen and should not show again if user choose to close it and does not want to see it again
 ```php
 
-use Elshaden\PopupCard\HasPopupCard;
+use Elshaden\PopupCard\HasPopupCards;
 
 class User extends Authenticatable
 {
-    use HasPopupCard;
+    use HasPopupCards;
 }
 ```
 
