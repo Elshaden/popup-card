@@ -62,7 +62,7 @@ class PopupCardController extends \App\Http\Controllers\Controller
                   return response()->json(['error' => 'User is not authenticated'], 403);
             }
 
-            $user->popupCard()->attach($request->popup_card_id, ['seen' => true]);
+            $user->popupCard()->where('id', $request->popup_card_id)->attach($request->popup_card_id, ['seen' => true]);
 
             return response()->json(['status' => 'success']);
       }
