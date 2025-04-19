@@ -9,6 +9,7 @@ use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 
+use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Fields\Trix;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -62,7 +63,7 @@ class PopupCardResource extends Resource
             Text::make('Name')->rules('required', 'max:120'),
             Text::make('Title')->rules('required', 'max:120'),
 
-            Trix::make(__('Content'), 'body')->rules('required'),
+            Textarea::make(__('Content'), 'body')->rules('required'),
 
             Boolean::make('Published')->default(true),
 
