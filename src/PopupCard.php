@@ -20,6 +20,11 @@ class PopupCard extends Card
         return $this->withMeta(['width' => $width ?? $this->width]);
     }
 
+    public function name($name)
+    {
+        return $this->withMeta(['name' => $name]);
+    }
+
 
     /**
      * Get the component name for the element.

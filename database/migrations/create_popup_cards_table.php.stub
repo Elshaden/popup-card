@@ -15,10 +15,12 @@ return new class extends Migration
     {
         Schema::create('popup_cards', function (Blueprint $table) {
             $table->id();
+            $table->string('name');
             $table->string('title');
             $table->text('body')->nullable();
             $table->boolean('published')->default(true);
             $table->boolean('active')->default(true);
+
             $table->timestamps();
 
         });

@@ -56,7 +56,7 @@ class CardServiceProvider extends ServiceProvider
             ->group(function () {
 
                 // Route to get the popup modal content
-                Route::get('/modal-content', [PopupCardController::class, 'getModalContent']);
+                Route::get('/modal-content/{name}', [PopupCardController::class, 'getModalContent']);
 
                 // Route to mark a popup as seen
                 Route::post('/mark-modal-seen', [PopupCardController::class, 'markModalSeen']);

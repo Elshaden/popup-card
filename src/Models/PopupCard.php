@@ -9,6 +9,7 @@ class PopupCard extends Model
 {
 
     protected $fillable = [
+        'name',
         'title',
         'body',
         'published',

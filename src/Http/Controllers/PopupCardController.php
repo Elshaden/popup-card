@@ -8,41 +8,47 @@ use Illuminate\Support\Facades\Log;
 
 class PopupCardController extends \App\Http\Controllers\Controller
 {
-      public function getModalContent()
+      public function getModalContent(Request $request, string $name)
       {
+          Log::info('Modal-content route accessed by $name: ' . $name . ' config: ' . config('popup_card.enabled')? 'true' : 'false' );
             if (!config('popup_card.enabled')) {
                   return response()->json(['show_modal' => false]);
             }
-            $user = Auth::user(); // Get the authenticated user
+          $user = auth()->user();
 
-            if (!$user) {
-                  return response()->json(['error' => 'User is not authenticated'], 403);
-            }
+          Log::info('Modal-content route accessed by user: ' . ($user->id ?? 'Guest'));
 
+          // Retrieve the latest active and published popup
+          $popupCardQuery = \Elshaden\PopupCard\Models\PopupCard::active()->where('name', $name);
+          $popupCard = $popupCardQuery->latest()->first();
 
-            // Retrieve the latest active and published popup card
-            $popupCard = \Elshaden\PopupCard\Models\PopupCard::active()->latest('popup_cards.created_at')->first();
+          Log::info('Modal-content route accessed by popupCard: ' . ($popupCard->id ?? 'No Popup'));
+          if (!$popupCard) {
+              return response()->json(['show_modal' => false, 'reason'=>'No Popup Found']); // No active modal found
+          }
 
-            if (!$popupCard) {
-                  // No active or published popup card found
-                  return response()->json(['show_modal' => false]);
-            }
+          // Check for unseen cards in user-pivot relationship
+          if($user->popupCard()->where('name', $name)->exists()) {
+              $unseenPopupCard = $user->popupCard()
+                  ->wherePivot('seen', false)
+                  ->where('name', $name)
+                  ->first();
+          }else{
+              $unseenPopupCard = $popupCard;
+          }
 
-            // Check if the user has already seen this popup card
-            $hasSeenPopup = $popupCard->users()->where('users.id', $user->id)->wherePivot('seen', true)->exists();
+          Log::info('Modal-content route accessed by unseenPopupCard: ' . ($unseenPopupCard->id ?? 'No Unseen Popup'));
 
-            if ($hasSeenPopup) {
-                  // User has already seen the popup card
-                  return response()->json(['show_modal' => false]);
-            }
-
-            // User has not seen the popup card, return it
-            return response()->json([
+          if ($unseenPopupCard) {
+              return response()->json([
                   'show_modal' => true,
-                  'title' => $popupCard->title,
-                  'body' => $popupCard->body,
-                  'popup_card_id' => $popupCard->id,
-            ]);
+                  'title' => $unseenPopupCard->title,
+                  'body' => $unseenPopupCard->body,
+                  'popup_card_id'=>$unseenPopupCard->id
+              ]);
+          }
+
+          return response()->json(['show_modal' => false]); // Default response
 
 
       }

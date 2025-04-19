@@ -44,6 +44,12 @@ php artisan migrate
 In your Main Dashboard file you can use the PopupCard 
 
 Or in any Nova Resource file you can use the PopupCard 
+
+The name(<is your Popup Name  >) when you created it
+
+You can specify for each page or resource what Popup To show
+
+
 ```php
 use Elshaden\PopupCard\PopupCard;
 
@@ -51,7 +57,7 @@ public function cards(Request $request)
 {
     return [
         ......
-        (new PopupCard())->width('1/4') // '1/4','1/3','1/2','2/3','3/4','full',
+        (new PopupCard())->name('Welcome')->width('1/4') // '1/4','1/3','1/2','2/3','3/4','full',
            
       ];
 }

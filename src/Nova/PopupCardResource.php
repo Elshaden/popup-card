@@ -3,10 +3,12 @@
 namespace Elshaden\PopupCard\Nova;
 
 use App\Nova\Resource;
+
 use Elshaden\PopupCard\Models\PopupCard;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
+
 use Laravel\Nova\Fields\Trix;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -57,6 +59,7 @@ class PopupCardResource extends Resource
     {
         return [
             ID::make()->sortable(),
+            Text::make('Name')->rules('required', 'max:120'),
             Text::make('Title')->rules('required', 'max:120'),
 
             Trix::make(__('Content'), 'body')->rules('required'),
