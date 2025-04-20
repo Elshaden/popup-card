@@ -49,6 +49,8 @@ The name(<is your Popup Name  >) when you created it
 
 You can specify for each page or resource what Popup To show
 
+#### Example
+Here the Popup will be only shows in the main dashboard.
 
 ```php
 use Elshaden\PopupCard\PopupCard;
@@ -57,13 +59,30 @@ public function cards(Request $request)
 {
     return [
         ......
-        (new PopupCard())->name('Welcome')->width('1/4') // '1/4','1/3','1/2','2/3','3/4','full',
+        (new PopupCard())->name('dashboard')->width('1/4') // '1/4','1/3','1/2','2/3','3/4','full',
            
       ];
 }
+
+
 ````
 
-You must Add the Trait to your user model
+In the cards method in the main dashboard add this 
+
+````php
+  public function cards(): array
+    {
+        return [
+            // .....
+            (new PopupCard())->name('dashboard')->width('1/3'),
+            
+            // .....
+        ];
+    }
+
+````
+
+You **MUST** Add the Trait to your user model
 This will store the popup card status as seen and should not show again if user choose to close it and does not want to see it again
 ```php
 

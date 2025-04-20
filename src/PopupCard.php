@@ -2,7 +2,6 @@
 
 namespace Elshaden\PopupCard;
 
-use Illuminate\Support\Facades\Log;
 use Laravel\Nova\Card;
 
 class PopupCard extends Card

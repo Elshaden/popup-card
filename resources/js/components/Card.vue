@@ -70,7 +70,7 @@ export default {
       // Make API request
       axios.get("/api/modal-content/" + this.name)
           .then(({data}) => {
-            console.log("API Response:", data);
+            //console.log("API Response:", data);
 
             // Use proper conditional logic for modal visibility
             if (data.show_modal) {
@@ -91,7 +91,7 @@ export default {
           });
     },
     hideModal() {
-      console.log("Hiding modal");
+     // console.log("Hiding modal");
       this.showModal = false;
     },
     doNotShowAgain() {
