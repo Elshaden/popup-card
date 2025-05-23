@@ -7,8 +7,8 @@ It is the same as  Nova card, except that it automatically  pops up when the pag
 The use cases are many such as Welcome message, Important message, New feature announcement, etc.
 
 ## Nova V 4
-This package is compatible with Nova V4
-Is not tested on previous versions of Nova or Nova V5. though it should work on Nova V5 without any issues.
+This package is compatible with Nova V4 / V5
+Is not tested on previous versions of Nova .
 
 
 ## Installation
@@ -78,14 +78,30 @@ public function cards(Request $request)
 
 ````
 
-In the cards method in the main dashboard add this 
+In the cards method in any resource file add this 
 
 ````php
   public function cards(): array
     {
         return [
             // .....
-            (new PopupCard())->name('dashboard')->width('1/3'),
+            (new PopupCard())->name('resource-filename')->width('1/3'),
+
+            // .....
+        ];
+    }
+
+````
+
+#### Show to specific users
+ You can you use the nova authorization method canSee
+
+````php
+  public function cards(): array
+    {
+        return [
+            // .....
+            (new PopupCard())->name('resource-filename')->width('1/3')->canSee(fn()=> true // or any criteria  ),
 
             // .....
         ];
