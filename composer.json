@@ -10,9 +10,18 @@
         "php": "^8.0|^8.1|^8.2",
         "laravel/nova": "^4.0|^5.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^10.0",
+        "orchestra/testbench": "^8.0"
+    },
     "autoload": {
         "psr-4": {
             "Elshaden\\PopupCard\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Elshaden\\PopupCard\\Tests\\": "tests/"
         }
     },
     "extra": {

@@ -19,6 +19,17 @@ You can install the package in Laravel Nova app that uses Nova via composer:
 composer require elshaden/nova-popup-card
 ```
 
+## Package Registration
+
+The package will be automatically registered using Laravel's package auto-discovery. However, if you have disabled auto-discovery, you need to manually register the package's service provider in your `config/app.php` file:
+
+```php
+'providers' => [
+    // ...
+    Elshaden\PopupCard\CardServiceProvider::class,
+],
+```
+
 ## Configuration
 You can publish the config file with:
 ```bash
@@ -60,7 +71,7 @@ public function cards(Request $request)
     return [
         ......
         (new PopupCard())->name('dashboard')->width('1/4') // '1/4','1/3','1/2','2/3','3/4','full',
-           
+
       ];
 }
 
@@ -75,7 +86,7 @@ In the cards method in the main dashboard add this
         return [
             // .....
             (new PopupCard())->name('dashboard')->width('1/3'),
-            
+
             // .....
         ];
     }
@@ -103,7 +114,7 @@ Elshaden\PopupCard\Nova\PopupCardResource
 ```
 
  You need to add the following code to your NovaServiceProvider.php file to register the resource
- 
+
 ```php  
 
 use Elshaden\PopupCard\Nova\PopupCardResource;
@@ -133,13 +144,50 @@ use Elshaden\PopupCard\Nova\PopupCardResource;
             .......
         ];
     });
- 
+
 ```
 > You can Create,Edit or Delete  a Popup
 > The system will show the latest active & published popup card to the user once the dashboard is loaded
 > 
 > The user can close the popup card.
 > The user can choose to not show the popup card again
+
+## Testing
+
+This package includes a comprehensive test suite. To run the tests:
+
+1. Install development dependencies:
+```bash
+composer install --dev
+```
+
+2. Run the tests:
+```bash
+vendor/bin/phpunit
+```
+
+### Available Test Suites
+
+- **Unit Tests**: Test individual components in isolation
+  ```bash
+  vendor/bin/phpunit --testsuite=Unit
+  ```
+
+- **Feature Tests**: Test API endpoints and integration
+  ```bash
+  vendor/bin/phpunit --testsuite=Feature
+  ```
+
+### Test Coverage
+
+Generate a test coverage report:
+```bash
+vendor/bin/phpunit --coverage-html coverage
+```
+
+For more detailed information about testing, including how to run tests from a project that has installed this package (using either PHPUnit or Pest PHP), refer to the [README-testing.md](README-testing.md) file.
+
+If you encounter any issues while using this package, please check the [README-troubleshooting.md](README-troubleshooting.md) file for common solutions.
 
 ## License
 
