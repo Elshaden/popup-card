@@ -42,7 +42,7 @@ Here's an example of how a welcome popup from ACME Company might look:
 You can install the package in Laravel Nova app that uses Nova via composer:
 
 ```bash
-composer require elshaden/nova-popup-card
+composer require elshaden/popup-card
 ```
 
 ## Package Registration
