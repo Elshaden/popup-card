@@ -1,14 +1,40 @@
 # Laravel Nova Popup Card
 
-### Simple Popup Card you can use anywhere in Nova apps.
-This package will allow you to create a simple popup card that will show to the user once the dashboard is loaded.
-The user can close the popup card and choose to not show it again.
-It is the same as  Nova card, except that it automatically  pops up when the page is loaded.
-The use cases are many such as Welcome message, Important message, New feature announcement, etc.
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/elshaden/popup-card.svg?style=flat-square)](https://packagist.org/packages/elshaden/popup-card)
+[![Total Downloads](https://img.shields.io/packagist/dt/elshaden/popup-card.svg?style=flat-square)](https://packagist.org/packages/elshaden/popup-card)
+[![License](https://img.shields.io/packagist/l/elshaden/popup-card.svg?style=flat-square)](https://packagist.org/packages/elshaden/popup-card)
 
-## Nova V 4
-This package is compatible with Nova V4 / V5
-Is not tested on previous versions of Nova .
+A customizable popup modal card for Laravel Nova that automatically displays to users when they access your dashboard or resource pages. Perfect for welcome messages, announcements, notifications, and more.
+
+## 🌟 Features
+
+- **Automatic Display**: Shows popup cards to users when they access specified pages
+- **User Tracking**: Remembers which users have seen which popups
+- **Do Not Show Again**: Users can opt out of seeing specific popups again
+- **Customizable Content**: Full HTML support for rich content in popups
+- **Configurable Width**: Choose from multiple width options (1/4, 1/3, 1/2, 2/3, 3/4, full)
+- **Targeted Display**: Show different popups on different pages or to specific users
+- **Admin Interface**: Manage all your popup cards through a Nova resource
+- **Database Storage**: All popup cards and user interactions are stored in the database
+- **Configurable Tables**: Customize database table names to fit your application
+
+## Example
+
+Here's an example of how a welcome popup from ACME Company might look:
+
+<div align="center">
+
+  <img src="docs/images/sample.png" alt="ACME Welcome Popup" width="600" />
+
+</div>
+
+*Note: Create this image based on the specifications in docs/images/sample-popup-instructions.md*
+
+## Compatibility
+
+- Laravel Nova 4.x and 5.x
+- PHP > = 8.0 up To 8.4
+- Laravel >=9.x up to 12.x
 
 
 ## Installation
@@ -79,26 +105,59 @@ You can publish the migration with:
 php artisan vendor:publish --provider="Elshaden\PopupCard\CardServiceProvider" --tag="popup-card-migrations"
 ```
 
-After publishing the migration, you can create the popup_card_statuses table by running the migrations:
+After publishing the migration, you can create the necessary database tables by running the migrations:
 
 ```bash 
 php artisan migrate
 ```
 
+This will create two tables:
+- `popup_cards`: Stores all your popup cards with their content and settings
+- `cards_users`: Pivot table that tracks which users have seen which popup cards
+
 
 
 
 ## Usage
-In your Main Dashboard file you can use the PopupCard 
 
-Or in any Nova Resource file you can use the PopupCard 
+### Basic Setup
 
-The name(<is your Popup Name  >) when you created it
+1. **Add the Trait to Your User Model**
 
-You can specify for each page or resource what Popup To show
+You **MUST** add the `HasPopupCards` trait to your user model. This enables tracking which users have seen which popups:
 
-#### Example
-Here the Popup will be only shows in the main dashboard.
+```php
+use Elshaden\PopupCard\Traits\HasPopupCards;
+
+class User extends Authenticatable
+{
+    use HasPopupCards;
+    
+    // rest of your model...
+}
+```
+
+2. **Register the Resource in Nova's Menu**
+
+Add the PopupCard resource to your Nova menu to manage popup cards:
+
+```php
+use Elshaden\PopupCard\Nova\PopupCardResource;
+
+Nova::mainMenu(function (Request $request) {
+    return [
+        // Other menu items...
+        MenuItem::resource(PopupCardResource::class),
+        // More menu items...
+    ];
+});
+```
+
+### Adding Popup Cards to Pages
+
+You can add popup cards to your dashboard or any resource page. The popup will automatically display when users visit that page.
+
+#### Dashboard Example
 
 ```php
 use Elshaden\PopupCard\PopupCard;
@@ -106,84 +165,71 @@ use Elshaden\PopupCard\PopupCard;
 public function cards(Request $request)
 {
     return [
-        ......
-        (new PopupCard())->name('dashboard')->width('1/4') // '1/4','1/3','1/2','2/3','3/4','full',
-
-      ];
+        // Other cards...
+        (new PopupCard())->name('welcome-message')->width('1/2'),
+    ];
 }
+```
 
+#### Resource Example
 
-````
-
-
-In the cards method in any resource file add this 
-
-````php
-  public function cards(): array
-    {
-  
-        return [
-            // .....
-            (new PopupCard())->name('popup-name')->width('1/3')->canSee(fn()=>true),
-
-            // .....
-        ];
-    }
-
-````
- **_You can use canSee() to set who can see this popup, example any user without 2-Factor Authentication_** 
-#### Show to specific users
- You can you use the nova authorization method canSee
-
-````php
-    use Elshaden\PopupCard\PopupCard;
-    
-    
-  public function cards(): array
-    {
-        return [
-            // .....
-            (new PopupCard())->name('resource-filename')->width('1/3')->canSee(fn()=> true // or any criteria  ),
-
-            // .....
-        ];
-    }
-
-````
-
-You **MUST** Add the Trait to your user model
-This will store the popup card status as seen and should not show again if user choose to close it and does not want to see it again
 ```php
+use Elshaden\PopupCard\PopupCard;
 
-use Elshaden\PopupCard\Traits\HasPopupCards;
-
-class User extends Authenticatable
+public function cards(Request $request)
 {
-    use HasPopupCards;
+    return [
+        // Other cards...
+        (new PopupCard())->name('user-instructions')->width('1/3'),
+    ];
 }
 ```
 
+### Customizing Display Conditions
 
-You can now add to your menu the Popup Card Resource to manage the popup cards
+You can control who sees the popup using Nova's `canSee()` method:
 
 ```php
-use Elshaden\PopupCard\Nova\PopupCardResource;
+use Elshaden\PopupCard\PopupCard;
 
-  Nova::mainMenu(function (Request $request) {
-        return [
-            .......
-            .......
-            MenuItem::resource(PopupCardResource::class),
-            .......
-        ];
-    });
-
+public function cards(Request $request)
+{
+    return [
+        // Other cards...
+        (new PopupCard())
+            ->name('2fa-reminder')
+            ->width('1/3')
+            ->canSee(function () use ($request) {
+                // Only show to users without 2FA enabled
+                return !$request->user()->hasTwoFactorEnabled();
+            }),
+    ];
+}
 ```
-> You can Create,Edit or Delete  a Popup
-> The system will show the latest active & published popup card to the user once the dashboard is loaded
-> 
-> The user can close the popup card.
-> The user can choose to not show the popup card again
+
+### Width Options
+
+You can customize the width of your popup card using one of these options:
+- `'1/4'` - 25% of screen width
+- `'1/3'` - 33% of screen width
+- `'1/2'` - 50% of screen width
+- `'2/3'` - 66% of screen width
+- `'3/4'` - 75% of screen width
+- `'full'` - 100% of screen width
+
+
+
+### Managing Popup Cards
+
+Using the PopupCard resource in Nova, you can:
+- Create new popup cards with custom titles and content
+- Edit existing popup cards
+- Publish or unpublish popup cards
+- View which users have seen each popup
+
+The system will automatically show the latest active and published popup card to users when they access the page where the popup is configured. Users can:
+- Close the popup card
+- Choose to not see the popup again by checking the "Do Not Show Again" option
 
 ## Testing
 
@@ -228,16 +274,19 @@ The MIT License (MIT). Please see [License File](LICENSE.md) for more informatio
 
 
 ## Credits
-- [Elshaden](
+- [Elshaden](https://github.com/elshaden) - Package Creator and Maintainer
 
 ## Contributing
-Please feel free to fork this package and contribute by submitting a pull request to enhance the functionalities.
+Please feel free to fork this package and contribute by submitting a pull request to enhance the functionalities. See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines on how to contribute.
 
 ## Security
 
-If you discover any security related issues, please email
-instead of using the issue tracker.
+If you discover any security related issues, please email security@example.com instead of using the issue tracker. All security vulnerabilities will be promptly addressed.
 
 ## Support
 
-Thank you for using this package, if you have issues or discover issues please use the issue tracker to report the issue.
+Thank you for using this package! If you encounter any issues or have questions:
+
+1. Check the [README-troubleshooting.md](README-troubleshooting.md) file for common solutions
+2. Search the [issue tracker](https://github.com/elshaden/popup-card/issues) to see if your issue has already been reported
+3. Open a new issue with a clear description and reproduction steps if needed

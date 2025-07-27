@@ -1,10 +1,21 @@
 {
     "name": "elshaden/popup-card",
-    "description": "A Laravel Nova card.",
+    "description": "A customizable popup modal card for Laravel Nova that automatically displays to users when they access your dashboard or resource pages.",
     "keywords": [
         "laravel",
-        "nova"
+        "nova",
+        "popup",
+        "modal",
+        "notification",
+        "announcement",
+        "card",
+        "laravel-nova"
     ],
+    "homepage": "https://github.com/elshaden/popup-card",
+    "support": {
+        "issues": "https://github.com/elshaden/popup-card/issues",
+        "source": "https://github.com/elshaden/popup-card"
+    },
     "license": "MIT",
     "require": {
         "php": "^8.0|^8.1|^8.2",
