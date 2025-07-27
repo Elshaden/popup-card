@@ -13,6 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  */
 trait HasPopupCards
 {
+
     /**
      * Get the popup cards associated with the user.
      *

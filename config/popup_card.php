@@ -21,8 +21,16 @@ return [
     // Modal size (1/4, 1/3, 1/2, 2/3, 3/4, full)
     'card_width' => '1/2',
 
-    // Whether to log popup displays
-    'log_displays' => false,
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Database Table Settings
+    |--------------------------------------------------------------------------
+    */
+
+    // The name of the main table for popup cards
+    'table_name' => 'popup_cards',
 
     /*
     |--------------------------------------------------------------------------

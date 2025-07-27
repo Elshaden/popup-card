@@ -13,22 +13,26 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('popup_cards', function (Blueprint $table) {
+        $tableName = config('popup_card.table_name', 'popup_cards');
+        $pivotTableName = config('popup_card.pivot_table', 'cards_users');
+        $popupCardForeignKey = config('popup_card.popup_card_foreign_key', 'popup_card_id');
+        $userForeignKey = config('popup_card.user_foreign_key', 'user_id');
+
+        Schema::create($tableName, function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('title');
             $table->text('body')->nullable();
             $table->boolean('published')->default(true);
             $table->boolean('active')->default(true);
 
             $table->timestamps();
-
         });
 
-        Schema::create('cards_users', function (Blueprint $table) {
+        Schema::create($pivotTableName, function (Blueprint $table) use ($tableName, $popupCardForeignKey, $userForeignKey) {
             $table->id();
-            $table->foreignId('popup_card_id')->constrained('popup_cards')->onDelete('cascade');
-            $table->foreignUuid('user_id')->constrained('users')->onDelete('cascade');
+            $table->foreignId($popupCardForeignKey)->constrained($tableName)->onDelete('cascade');
+            $table->foreignUuid($userForeignKey)->constrained('users')->onDelete('cascade');
             $table->boolean('seen')->default(false);
             $table->timestamps();
         });
@@ -41,6 +45,10 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('popup_cards');
+        $pivotTableName = config('popup_card.pivot_table', 'cards_users');
+        $tableName = config('popup_card.table_name', 'popup_cards');
+        
+        Schema::dropIfExists($pivotTableName);
+        Schema::dropIfExists($tableName);
     }
 };
