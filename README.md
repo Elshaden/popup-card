@@ -36,6 +36,43 @@ You can publish the config file with:
    php artisan vendor:publish --provider="Elshaden\PopupCard\CardServiceProvider" --tag="popup-card-config"
 ```
 
+### Database Table Configuration
+The package allows you to customize the database table names and foreign keys used by the popup card system. This is useful if you need to avoid table name conflicts or follow specific naming conventions in your application.
+
+Available configuration options:
+
+```php
+// config/popup_card.php
+
+// The name of the main table for popup cards
+'table_name' => 'popup_cards',
+
+// The name of the pivot table between users and popup cards
+'pivot_table' => 'cards_users',
+
+// The foreign key for the user in the pivot table
+'user_foreign_key' => 'user_id',
+
+// The foreign key for the popup card in the pivot table
+'popup_card_foreign_key' => 'popup_card_id',
+```
+
+#### Example: Customizing Table Names
+
+If you want to use custom table names, you can modify these values in your published configuration file:
+
+```php
+// config/popup_card.php
+
+// Use a custom table name for popup cards
+'table_name' => 'my_custom_popup_cards',
+
+// Use a custom pivot table name
+'pivot_table' => 'my_custom_popup_card_user',
+```
+
+After changing these values, make sure to run the migrations to create the tables with your custom names.
+
 ## Migrations
 You can publish the migration with:
 ```bash

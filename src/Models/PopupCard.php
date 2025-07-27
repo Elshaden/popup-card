@@ -23,6 +23,26 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 class PopupCard extends Model
 {
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table;
+
+    /**
+     * Create a new instance of the model.
+     *
+     * @param array $attributes
+     * @return void
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        
+        $this->table = config('popup_card.table_name', 'popup_cards');
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<string>
@@ -91,8 +111,8 @@ class PopupCard extends Model
         return $this->belongsToMany(
             $userModel,
             config('popup_card.pivot_table', 'cards_users'), // Pivot table name
-            'popup_card_id',   // Foreign key on pivot table for PopupCard
-            'user_id'          // Foreign key on pivot table for User
+            config('popup_card.popup_card_foreign_key', 'popup_card_id'),   // Foreign key on pivot table for PopupCard
+            config('popup_card.user_foreign_key', 'user_id')          // Foreign key on pivot table for User
         )->withPivot('seen');
     }
 }
