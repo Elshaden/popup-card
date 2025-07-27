@@ -157,6 +157,8 @@ Nova::mainMenu(function (Request $request) {
 
 You can add popup cards to your dashboard or any resource page. The popup will automatically display when users visit that page.
 
+> **Important**: The name you use in the `->name()` method must match the name of an existing popup card in your database. You need to create the popup card first using the Nova admin panel before you can display it in your code.
+
 #### Dashboard Example
 
 ```php
@@ -170,6 +172,7 @@ public function cards(Request $request)
     ];
 }
 ```
+In this example, a popup card with the name "welcome-message" must already exist in your database.
 
 #### Resource Example
 
@@ -184,6 +187,7 @@ public function cards(Request $request)
     ];
 }
 ```
+Similarly, a popup card with the name "user-instructions" must already exist in your database.
 
 ### Customizing Display Conditions
 
@@ -207,6 +211,8 @@ public function cards(Request $request)
 }
 ```
 
+In this example, a popup card with the name "2fa-reminder" must already exist in your database. This popup would only be shown to users who don't have two-factor authentication enabled.
+
 ### Width Options
 
 You can customize the width of your popup card using one of these options:
@@ -218,6 +224,35 @@ You can customize the width of your popup card using one of these options:
 - `'full'` - 100% of screen width
 
 
+### How It Works: Complete Workflow
+
+Here's a step-by-step explanation of how the popup card system works:
+
+1. **Create a Popup Card in Nova Admin Panel**
+   - Navigate to the PopupCard resource in your Nova admin panel
+   - Click "Create Popup Card"
+   - Fill in the required fields:
+     - **Name**: A unique identifier (e.g., "2fa-reminder") - this is crucial!
+     - **Title**: The title displayed at the top of the popup
+     - **Body**: The content of the popup (supports HTML)
+   - Set "Published" and "Active" to true
+   - Save the popup card
+
+2. **Reference the Popup Card in Your Code**
+   - In your dashboard or resource file, add the PopupCard to the cards method
+   - Use the **exact same name** you specified in the admin panel:
+     ```php
+     (new PopupCard())->name('2fa-reminder')->width('1/3')
+     ```
+   - Optionally add conditions using `canSee()` to control who sees the popup
+
+3. **User Experience**
+   - When a user visits the page, the system checks if there's an active popup card with the specified name
+   - If found and the user hasn't seen it before, the popup is displayed
+   - The user can close the popup or choose not to see it again
+
+This name-based reference system allows you to create different popup cards for different parts of your application and control them centrally through the Nova admin panel.
+
 
 ### Managing Popup Cards
 
@@ -226,6 +261,18 @@ Using the PopupCard resource in Nova, you can:
 - Edit existing popup cards
 - Publish or unpublish popup cards
 - View which users have seen each popup
+
+#### Creating Popup Cards
+
+When creating a popup card in the Nova admin panel, pay special attention to the **name** field:
+
+1. The **name** field must be unique for each popup card
+2. This name is used to reference the popup card in your code via the `->name()` method
+3. The popup card must be created in the admin panel **before** it can be displayed in your code
+
+For example, if you want to use `->name('2fa-reminder')` in your code, you must first create a popup card with the name "2fa-reminder" in the Nova admin panel.
+
+#### User Interaction
 
 The system will automatically show the latest active and published popup card to users when they access the page where the popup is configured. Users can:
 - Close the popup card
