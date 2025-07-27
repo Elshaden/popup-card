@@ -20,7 +20,7 @@ return new class extends Migration
 
         Schema::create($tableName, function (Blueprint $table) {
             $table->id();
-            $table->string('name');
+            $table->string('name')->unique();
             $table->string('title');
             $table->text('body')->nullable();
             $table->boolean('published')->default(true);

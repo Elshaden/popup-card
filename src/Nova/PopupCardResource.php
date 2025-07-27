@@ -60,7 +60,8 @@ class PopupCardResource extends Resource
     {
         return [
             ID::make()->sortable(),
-            Text::make('Name')->rules('required', 'max:120'),
+            Text::make('Name')->creationRules('required', 'max:120', 'unique:'.config('popup_card.table_name', 'popup_cards').',name')
+            ->updateRules('required', 'max:120', 'unique:'.config('popup_card.table_name', 'popup_cards').',name,{{resourceId}}'),
             Text::make('Title')->rules('required', 'max:120'),
 
             Textarea::make(__('Content'), 'body')->rules('required'),
