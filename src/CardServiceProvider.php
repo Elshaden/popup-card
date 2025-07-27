@@ -3,6 +3,7 @@
 namespace Elshaden\PopupCard;
 
 use Elshaden\PopupCard\Http\Controllers\PopupCardController;
+use Elshaden\PopupCard\Nova\PopupCardResource;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Nova\Events\ServingNova;
@@ -20,6 +21,12 @@ class CardServiceProvider extends ServiceProvider
     {
         $this->app->booted(function () {
             $this->routes();
+            if (class_exists(Nova::class)) {
+                Nova::resources([
+                    PopupCardResource::class,
+                ]);
+            }
+
         });
 
         Nova::serving(function (ServingNova $event) {

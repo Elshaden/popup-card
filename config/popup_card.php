@@ -21,8 +21,7 @@ return [
     // Modal size (1/4, 1/3, 1/2, 2/3, 3/4, full)
     'card_width' => '1/2',
 
-    // Whether to log popup displays
-    'log_displays' => false,
+
 
     /*
     |--------------------------------------------------------------------------

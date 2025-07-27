@@ -42,7 +42,7 @@ You can publish the migration with:
 php artisan vendor:publish --provider="Elshaden\PopupCard\CardServiceProvider" --tag="popup-card-migrations"
 ```
 
-After publishing the migration you can create the popup_card_statuses table by running the migrations:
+After publishing the migration, you can create the popup_card_statuses table by running the migrations:
 
 ```bash 
 php artisan migrate
@@ -78,25 +78,30 @@ public function cards(Request $request)
 
 ````
 
+
 In the cards method in any resource file add this 
 
 ````php
   public function cards(): array
     {
+  
         return [
             // .....
-            (new PopupCard())->name('resource-filename')->width('1/3'),
+            (new PopupCard())->name('popup-name')->width('1/3')->canSee(fn()=>true),
 
             // .....
         ];
     }
 
 ````
-
+ **_You can use canSee() to set who can see this popup, example any user without 2-Factor Authentication_** 
 #### Show to specific users
  You can you use the nova authorization method canSee
 
 ````php
+    use Elshaden\PopupCard\PopupCard;
+    
+    
   public function cards(): array
     {
         return [
@@ -113,7 +118,7 @@ You **MUST** Add the Trait to your user model
 This will store the popup card status as seen and should not show again if user choose to close it and does not want to see it again
 ```php
 
-use Elshaden\PopupCard\HasPopupCards;
+use Elshaden\PopupCard\Traits\HasPopupCards;
 
 class User extends Authenticatable
 {
@@ -121,31 +126,6 @@ class User extends Authenticatable
 }
 ```
 
-
-To Manage the Popup Card you have to use the Nova Resource available in the package
-
-```php
-Elshaden\PopupCard\Nova\PopupCardResource
-
-```
-
- You need to add the following code to your NovaServiceProvider.php file to register the resource
-
-```php  
-
-use Elshaden\PopupCard\Nova\PopupCardResource;
-
-    protected function resources(): void
-    {
-        parent::resources();
-        Nova::resources([
-            PopupCardResource::class,
-
-        ]);
-
-
-    }
-```
 
 You can now add to your menu the Popup Card Resource to manage the popup cards
 
