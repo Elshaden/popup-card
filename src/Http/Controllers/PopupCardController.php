@@ -87,7 +87,7 @@ class PopupCardController extends \App\Http\Controllers\Controller
 
         // Validate the request
         $validator = Validator::make($request->all(), [
-            'popup_card_id' => 'required|integer|exists:popup_cards,id',
+            'popup_card_id' => 'required|integer|exists:'.config('popup_card.table_name', 'popup_cards').',id',
         ]);
 
         if ($validator->fails()) {
