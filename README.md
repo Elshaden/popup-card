@@ -1,8 +1,9 @@
 # Laravel Nova Popup Card
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/elshaden/popup-card.svg?style=flat-square)](https://packagist.org/packages/elshaden/popup-card)
-[![Total Downloads](https://img.shields.io/packagist/dt/elshaden/popup-card.svg?style=flat-square)](https://packagist.org/packages/elshaden/popup-card)
-[![License](https://img.shields.io/packagist/l/elshaden/popup-card.svg?style=flat-square)](https://packagist.org/packages/elshaden/popup-card)
+[![Total Downloads](https://img.shields.io/packagist/dt/elshaden/popup-card)](https://packagist.org/packages/elshaden/popup-card)
+[![License](https://img.shields.io/badge/license-MIT-blue)](https://github.com/elshaden/popup-card/blob/main/LICENSE.md)
+[![GitHub Stars](https://img.shields.io/github/stars/elshaden/popup-card)](https://github.com/elshaden/popup-card/stargazers)
 
 A customizable popup modal card for Laravel Nova that automatically displays to users when they access your dashboard or resource pages. Perfect for welcome messages, announcements, notifications, and more.
 
