@@ -21,7 +21,7 @@ class CardServiceProvider extends ServiceProvider
     {
         $this->app->booted(function () {
             $this->routes();
-            if (class_exists(Nova::class)) {
+            if (class_exists(Nova::class) && config('popup_card.enabled', false) === true) {
                 Nova::resources([
                     PopupCardResource::class,
                 ]);

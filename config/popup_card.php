@@ -22,6 +22,12 @@ return [
     'card_width' => '1/2',
 
 
+    // Enable or disable showing the users in the PopupCards Resource
+    'show_seen_by_users'=>false,
+
+    // Enable or disable showing the user count in the PopupCards Resource
+    'show_users_count'=>true,
+
 
     /*
     |--------------------------------------------------------------------------
@@ -38,6 +44,8 @@ return [
     |--------------------------------------------------------------------------
     */
 
+
+
     // The model class to use for users
     'user_model' => 'App\Models\User',
 
@@ -50,21 +58,8 @@ return [
     // The foreign key for the popup card in the pivot table
     'popup_card_foreign_key' => 'popup_card_id',
 
-    /*
-    |--------------------------------------------------------------------------
-    | Appearance Settings
-    |--------------------------------------------------------------------------
-    */
 
-    // Default title for popup cards (used if title is not provided)
-    'default_title' => 'Notification',
+    'user_nova_resource'=> 'App\Nova\User',
 
-    // Default body for popup cards (used if body is not provided)
-    'default_body' => 'This is a notification from the system.',
 
-    // Text for the close button
-    'close_button_text' => 'Close',
-
-    // Text for the "do not show again" button
-    'do_not_show_again_text' => 'Do Not Show Again',
 ];

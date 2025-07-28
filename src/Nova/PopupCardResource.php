@@ -5,6 +5,7 @@ namespace Elshaden\PopupCard\Nova;
 use App\Nova\Resource;
 
 use Elshaden\PopupCard\Models\PopupCard;
+use Laravel\Nova\Fields\BelongsToMany;
 use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
@@ -69,6 +70,15 @@ class PopupCardResource extends Resource
             Boolean::make('Published')->default(true),
 
             Boolean::make('Active')->default(true),
+
+            Text::make('Users Count',fn()=>$this->users()->count())->exceptOnForms()->canSee(function(){
+                return config('popup_card.show_users_count', false);
+            }),
+
+            BelongsToMany::make('Seen By', 'users', config('popup_card.user_nova_resource', 'App\Nova\User'))
+            ->canSee(function(){
+                return config('popup_card.show_seen_by_users', false);
+            })
         ];
     }
 

@@ -100,6 +100,64 @@ If you want to use custom table names, you can modify these values in your publi
 
 After changing these values, make sure to run the migrations to create the tables with your custom names.
 
+#### Configuration Content
+```php
+ /*
+    |--------------------------------------------------------------------------
+    | General Settings
+    |--------------------------------------------------------------------------
+    */
+
+    // Whether the popup modal is enabled.
+    'enabled' => true,
+
+    // Modal size (1/4, 1/3, 1/2, 2/3, 3/4, full)
+    'card_width' => '1/2',
+
+
+    // Enable or disable showing the users in the PopupCards Resource
+    'show_seen_by_users'=>false,
+
+    // Enable or disable showing the user count in the PopupCards Resource
+    'show_users_count'=>true,
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Database Table Settings
+    |--------------------------------------------------------------------------
+    */
+
+    // The name of the main table for popup cards
+    'table_name' => 'popup_cards',
+
+    /*
+    |--------------------------------------------------------------------------
+    | User Model and Relationship Settings
+    |--------------------------------------------------------------------------
+    */
+
+
+
+    // The model class to use for users
+    'user_model' => 'App\Models\User',
+
+    // The name of the pivot table between users and popup cards
+    'pivot_table' => 'cards_users',
+
+    // The foreign key for the user in the pivot table
+    'user_foreign_key' => 'user_id',
+
+    // The foreign key for the popup card in the pivot table
+    'popup_card_foreign_key' => 'popup_card_id',
+
+
+    'user_nova_resource'=> 'App\Nova\User',
+
+
+```
+
+
 ## Migrations
 You can publish the migration with:
 ```bash
@@ -148,7 +206,7 @@ use Elshaden\PopupCard\Nova\PopupCardResource;
 Nova::mainMenu(function (Request $request) {
     return [
         // Other menu items...
-        MenuItem::resource(PopupCardResource::class),
+        MenuItem::resource(PopupCardResource::class)->canSee(fn()=>config('popup_card.enabled')),
         // More menu items...
     ];
 });
@@ -239,13 +297,25 @@ Here's a step-by-step explanation of how the popup card system works:
    - Set "Published" and "Active" to true
    - Save the popup card
 
-2. **Reference the Popup Card in Your Code**
-   - In your dashboard or resource file, add the PopupCard to the cards method
-   - Use the **exact same name** you specified in the admin panel:
-     ```php
-     (new PopupCard())->name('2fa-reminder')->width('1/3')
+     2. **Reference the Popup Card in Your Code**
+     - In your dashboard or resource file, add the PopupCard to the cards method
+     - Use the **exact same name** you specified in the admin panel:
+     - Optionally add conditions using `canSee()` to control who sees the popup
+   
+      ```php
+  
+        public function cards(): array
+       {
+          return [
+             //....
+               (new PopupCard())->name('2fa-reminder')->width('1/3')
+             //...
+           ];
+       }
+     
      ```
-   - Optionally add conditions using `canSee()` to control who sees the popup
+     
+     
 
 3. **User Experience**
    - When a user visits the page, the system checks if there's an active popup card with the specified name
@@ -265,13 +335,12 @@ Using the PopupCard resource in Nova, you can:
 
 #### Creating Popup Cards
 
-When creating a popup card in the Nova admin panel, pay special attention to the **name** field:
+When creating a popup card in the Nova admin panel
 
 1. The **name** field must be unique for each popup card
 2. This name is used to reference the popup card in your code via the `->name()` method
 3. The popup card must be created in the admin panel **before** it can be displayed in your code
 
-For example, if you want to use `->name('2fa-reminder')` in your code, you must first create a popup card with the name "2fa-reminder" in the Nova admin panel.
 
 #### User Interaction
 
