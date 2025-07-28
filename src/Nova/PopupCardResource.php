@@ -48,8 +48,17 @@ class PopupCardResource extends Resource
      * @var array
      */
     public static $search = [
-        'id','title','body'
+        'id','title'
     ];
+
+    /**
+     * The click action to use when clicking on the resource in the table.
+     *
+     * Can be one of: 'detail' (default), 'edit', 'select', 'preview', or 'ignore'.
+     *
+     * @var string
+     */
+    public static $clickAction = 'preview';
 
     /**
      * Get the fields displayed by the resource.
@@ -66,6 +75,8 @@ class PopupCardResource extends Resource
             Text::make('Title')->rules('required', 'max:120'),
 
             Textarea::make(__('Content'), 'body')->rules('required'),
+
+            Text::make('-', 'body')->asHtml()->exceptOnForms()->showOnPreview(),
 
             Boolean::make('Published')->default(true),
 
